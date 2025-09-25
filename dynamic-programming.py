@@ -1,13 +1,19 @@
 N = 20
 
+dp = [0] * (N + 1)
 
-def fibonacci(n: int):
+
+def fibonacci_with_dp(n: int):
     if n == 1:
         return 1
     if n == 2:
         return 1
 
-    return fibonacci(n - 1) + fibonacci(n - 2)
+    if dp[n] != 0:
+        return dp[n]
+
+    dp[n] = fibonacci_with_dp(n - 1) + fibonacci_with_dp(n - 2)
+    return dp[n]
 
 
-print(fibonacci(N))
+print(fibonacci_with_dp(N))
