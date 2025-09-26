@@ -14,9 +14,9 @@ def coin_changing(k):
     count = 0
 
     동전 종류를 마지막 인덱스부터 순회:
-        동전 종류보다 현재 값이 작을 때까지:
-            현재 값에서 차감
-            count ++
+        동전 종류보다 현재 값이 크면:
+            현재 값 = 현재 값 % 동전 종류
+            count += 현재 값 // 동전 종류
 
         만약 curr 값이 0이면 종료
 
@@ -42,9 +42,10 @@ def coin_changing(k):
     count = 0
 
     for i in range(len(coins) - 1, -1, -1):
-        while curr >= coins[i]:
-            curr -= coins[i]
-            count += 1
+        if curr >= coins[i]:
+            c_count = curr // coins[i]
+            curr = curr % coins[i]
+            count += c_count
         if curr == 0:
             break
 
