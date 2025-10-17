@@ -11,15 +11,15 @@
 0 <= 필요한 나무 높이 <= 10억
 
 Reduction
-1. 나무 높이의 반을 찍는다.
-2. 얻을 수 있는 나무 길이를 계산한다.
+1. 나무 높이의 중간값을 구한다.
+2. 중간값으로 잘랐을 때 얻을 수 있는 나무 길이 합을 구한다.
 3-1. 필요한 길이보다 크면 저장하고 1번부터 반복
 3-2. 작으면 1번부터 반복
 
 점화식
-f(n) = f(n/2)
+f(n) = f(n/2) + O(n)
 
-시간복잡도: O(logM) + O(N)
+시간복잡도: O(NlogM)
 
 Pseudo Code
 MAX_TREE_H = 최대 나무 길이 준비
@@ -27,20 +27,20 @@ MAX_TREE_H = 최대 나무 길이 준비
 max_cut_h = 0
 
 def find_max_height(min_tree_h, max_tree_h):
-    half = 나무 길이 중간값
+    mid = 나무 길이 중간값
     get_h = 0
 
     나무 수만큼 반복:
         half보다 작으면 break
-        get_h += 나무 길이 - half
+        get_h += 나무 길이 - mid
 
     필요한 길이가 get_h와 같으면
         max_cut_h = get_h
     크면
         max_cut_h = get_h
-        find_max_height(min_tree_h, half)
+        find_max_height(min_tree_h, mid)
     작으면
-        find_max_height(half, max_tree_h)
+        find_max_height(mid, max_tree_h)
 
 find_max_height(0, MAX_TREE_H)
 print(max_cut_h)
@@ -57,23 +57,23 @@ max_cut_h = 0
 
 
 def find_max_height(min_tree_h, max_tree_h):
-    global max_cut_h
-    half = (max_tree_h + min_tree_h) // 2
-    total_h = 0
+    result = 0
 
-    for tree_h in TREE_LIST:
-        if tree_h < half:
-            break
-        total_h += tree_h - half
+    while min_tree_h <= max_tree_h:
+        mid = (max_tree_h + min_tree_h) // 2
+        total_h = 0
 
-    if M == total_h:
-        max_cut_h = half
-    elif M > total_h:
-        max_cut_h = half
-        find_max_height(min_tree_h, half)
-    else:
-        find_max_height(half, max_tree_h)
+        for tree_h in TREE_LIST:
+            if tree_h > mid:
+                total_h += tree_h - mid
+
+        if total_h >= M:
+            result = mid
+            min_tree_h = mid + 1
+        else:
+            max_tree_h = mid - 1
+
+    return result
 
 
-find_max_height(0, MAX_TREE_H)
-print(max_cut_h)
+print(find_max_height(0, MAX_TREE_H))
